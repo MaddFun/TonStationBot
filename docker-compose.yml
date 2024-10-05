@@ -1,0 +1,25 @@
+services:
+  bot:
+    container_name: 'Tonstation_bot'
+    networks:
+      - tg_bots_network
+    build:
+      context: .
+    stop_signal: SIGINT
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    environment:
+      - TZ=Europe/Moscow
+    volumes:
+      - ../sessions/Tonstation:/app/sessions
+
+    restart: unless-stopped
+    command: "python3 main.py -a 1"
+    env_file: .env
+
+networks:
+  tg_bots_network:
+    external: true
